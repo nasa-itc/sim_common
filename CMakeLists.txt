@@ -29,14 +29,7 @@ set(sim_common_libs
 # For Code::Blocks and other IDEs
 file(GLOB sim_common_inc inc/*.hpp)
 
-set(sim_common_config
-    cfg/nos3-simulator.xml
-    cfg/sim_log_config.xml
-    cfg/gps_data.42
-)
-
 add_library(sim_common SHARED ${sim_common_src} ${sim_common_inc})
 target_link_libraries(sim_common ${sim_common_libs})
 
 install(TARGETS sim_common LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-install(FILES ${sim_common_config} DESTINATION bin COMPONENT config)
