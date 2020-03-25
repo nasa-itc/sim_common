@@ -129,6 +129,40 @@ namespace Nos3
             return ss.str();
         };
         //@}
+        //@{
+        /** \brief Method to convert a vector of uint8_t to a string where each uint8_t is interpreted using its ASCII value.
+         *
+         * @param       v   The buffer (vector) of bytes to be converted.
+         * @return          The string with the converted bytes.
+         */
+        static std::string  uint8_vector_to_ascii_string(const std::vector<uint8_t> & v)
+        {
+            std::stringstream ss;
+            std::vector<uint8_t>::const_iterator it;
+
+            for (it = v.begin(); it != v.end(); it++) 
+            {
+                ss << static_cast<char>(*it);
+            }
+
+            return ss.str();
+        };
+        //@}
+        //@{
+        /** \brief Method to convert an ASCII string to a vector of uint8_t.
+         *
+         * @param       v   The buffer (vector) of bytes to be converted.
+         * @return          The string with the converted bytes.
+         */
+        static std::vector<uint8_t> ascii_string_to_uint8_vector(const std::string& in_data)
+        {
+            std::vector<uint8_t> out_data;
+            for (size_t i = 0; i < in_data.length(); i++) {
+                out_data.push_back(in_data[i]);
+            }
+            return out_data;
+        }
+        //@}
     protected:
         // Protected data
         const double                                 _absolute_start_time;
