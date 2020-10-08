@@ -104,7 +104,6 @@ namespace Nos3
             }
         }
 
-
         /** \brief Method to determine what to do with a command to the simulator received on the command bus.  The default is to do nothing.
          *
          * @param       msg         The NOS Engine message sent with the command.
@@ -174,6 +173,7 @@ namespace Nos3
             return out_data;
         }
         //@}
+		
     protected:
         // Protected data
         std::atomic<bool>                            _keep_running;
