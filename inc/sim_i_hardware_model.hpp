@@ -53,8 +53,10 @@ namespace Nos3
         /// @param  provider_key The name of the data provider
         /// @param  sc  The configuration for the simulation
         SimIHardwareModel(const boost::property_tree::ptree& config) :
+            _keep_running(true),
             _absolute_start_time(config.get("common.absolute-start-time", 552110400.0)),
             _sim_microseconds_per_tick(config.get("common.sim-microseconds-per-tick", 1000000)),
+            _real_microseconds_per_tick(config.get("common.real-microseconds-per-tick", 1000000)),
             _command_bus(nullptr),
             _command_node(nullptr)
         {
@@ -93,7 +95,15 @@ namespace Nos3
 
         /** \brief Method to run the hardware model simulation.
          */
-        virtual void run(void) = 0;
+        virtual void run(void)
+        {
+            // Spin so the callbacks remain valid
+            while(_keep_running)
+            {
+                std::this_thread::sleep_for(std::chrono::microseconds(_real_microseconds_per_tick));
+            }
+        }
+
 
         /** \brief Method to determine what to do with a command to the simulator received on the command bus.  The default is to do nothing.
          *
@@ -129,6 +139,7 @@ namespace Nos3
             return ss.str();
         };
         //@}
+
         //@{
         /** \brief Method to convert a vector of uint8_t to a string where each uint8_t is interpreted using its ASCII value.
          *
@@ -165,8 +176,10 @@ namespace Nos3
         //@}
     protected:
         // Protected data
+        std::atomic<bool>                            _keep_running;
         const double                                 _absolute_start_time;
         const int64_t                                _sim_microseconds_per_tick;
+        const int64_t                                _real_microseconds_per_tick;
         NosEngine::Transport::TransportHub           _hub;
         std::string                                  _command_bus_name;
         std::string                                  _command_node_name;
