@@ -18,6 +18,7 @@
 #ifndef NOS3_SIMIHARDWAREMODEL_HPP
 #define NOS3_SIMIHARDWAREMODEL_HPP
 
+#include <atomic>
 #include <cstdint>
 #include <vector>
 #include <iomanip>
