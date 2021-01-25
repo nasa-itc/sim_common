@@ -24,7 +24,10 @@ set(sim_common_src
 set(sim_common_libs
     ${Boost_LIBRARIES}
     ${ITC_Common_LIBRARIES}
+    ${NOSENGINE_LIBRARIES}
 )
+
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH}:$ORIGIN/../lib") # Pick up .so in install directory
 
 # For Code::Blocks and other IDEs
 file(GLOB sim_common_inc inc/*.hpp)
@@ -33,3 +36,13 @@ add_library(sim_common SHARED ${sim_common_src} ${sim_common_inc})
 target_link_libraries(sim_common ${sim_common_libs})
 
 install(TARGETS sim_common LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+
+add_executable(nos3-all-simulators src/all_simulators.cpp)
+set_target_properties(nos3-all-simulators PROPERTIES COMPILE_FLAGS "" LINK_FLAGS "")
+target_link_libraries(nos3-all-simulators sim_common pthread)
+install(TARGETS nos3-all-simulators RUNTIME DESTINATION bin)
+
+add_executable(nos3-single-simulator src/single_simulator.cpp)
+set_target_properties(nos3-single-simulator PROPERTIES COMPILE_FLAGS "" LINK_FLAGS "")
+target_link_libraries(nos3-single-simulator sim_common)
+install(TARGETS nos3-single-simulator RUNTIME DESTINATION bin)
