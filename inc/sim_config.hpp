@@ -21,6 +21,7 @@
 #define SIM_LOGGER                "nos3.sim"
 
 #include <string>
+#include <vector>
 #include <stdint.h>
 
 #include <boost/property_tree/ptree.hpp>
@@ -58,6 +59,9 @@ namespace Nos3
 
         /// \brief Returns a copy of the property tree of all configuration data read from the command line and configuration file.
         boost::property_tree::ptree get_config(void) const;
+		
+        /// \brief Returns a vector of strings containing the names of the simulators in the config file.
+		std::vector<std::string> get_simulator_names(void) const;
 
         /// \brief Returns a string representation of this object.
         /// @return A string representing the data in this object.

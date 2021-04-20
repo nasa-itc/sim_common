@@ -81,6 +81,22 @@ namespace Nos3
         }
     }
 
+	std::vector<std::string> SimConfig::get_simulator_names(void) const
+	{
+		std::vector<std::string> simulator_names;
+        if (_config.get_child_optional("nos3-configuration.simulators")) 
+        {
+            BOOST_FOREACH(const boost::property_tree::ptree::value_type &v, _config.get_child("nos3-configuration.simulators")) 
+            {
+                std::string name = v.second.get("name", "");
+                if (name.compare("") != 0) {
+    				simulator_names.push_back(v.second.get("name", ""));
+                }
+			}
+		}
+		return simulator_names;
+	}
+	
     boost::property_tree::ptree SimConfig::get_config_for_simulator(std::string simulator_name) const
     {
         boost::property_tree::ptree sim_config;
