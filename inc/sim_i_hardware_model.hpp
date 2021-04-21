@@ -162,8 +162,8 @@ namespace Nos3
         //@{
         /** \brief Method to convert an ASCII string to a vector of uint8_t.
          *
-         * @param       v   The buffer (vector) of bytes to be converted.
-         * @return          The string with the converted bytes.
+         * @param  in_data  The string of characters to convert.
+         * @return          The buffer (vector) of converted bytes.
          */
         static std::vector<uint8_t> ascii_string_to_uint8_vector(const std::string& in_data)
         {
@@ -171,6 +171,40 @@ namespace Nos3
             for (size_t i = 0; i < in_data.length(); i++) {
                 out_data.push_back(in_data[i]);
             }
+            return out_data;
+        }
+        //@}
+        //@{
+        /** \brief Method to convert a double to a vector of uint8_t.
+         *
+         * @param  in_data  The double to convert.
+         * @return          The buffer (vector) of converted bytes.
+         */
+        static std::vector<uint8_t> double_to_uint8_vector(const double& in_data)
+        {
+            int64_t ival;
+            static_assert(sizeof(double) == sizeof(int64_t)); // not portable, but no surprises on the COSMOS end either and our assumed platform has 64 bit doubles
+            std::memcpy(&ival, &in_data, sizeof(in_data));
+
+            std::vector<uint8_t> out_data;
+            for (size_t i = 0; i < sizeof(int64_t)/sizeof(uint8_t); i++) {
+                out_data.push_back((uint8_t)( (ival >> (7-i)*8) & 0x000000FF) );
+            }
+            
+            return out_data;
+        }
+        //@}
+        //@{
+        /** \brief Method to convert an int16_t to a vector of uint8_t.
+         *
+         * @param  in_data  The int16_t to convert.
+         * @return          The buffer (vector) of converted bytes.
+         */
+        static std::vector<uint8_t> int16_to_uint8_vector(const int16_t& in_data)
+        {
+            std::vector<uint8_t> out_data;
+            out_data.push_back((uint8_t)( (in_data >> 8) & 0x00FF) );
+            out_data.push_back((uint8_t)( (in_data     ) & 0x00FF) );
             return out_data;
         }
         //@}

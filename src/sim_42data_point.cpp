@@ -56,4 +56,18 @@ namespace Nos3
         return ss.str();
     }
 
+
+    /*************************************************************************
+     * Static methods
+     *************************************************************************/
+
+    void Sim42DataPoint::parse_double_vector(const std::string& text, std::vector<double>& dv) 
+    {
+        dv.clear();
+        std::istringstream iss(text);
+        for (std::string s; iss >> s; )
+            dv.push_back(std::stod(s));
+    }
+    
+
 }
