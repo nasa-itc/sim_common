@@ -58,10 +58,10 @@ namespace Nos3
         static double JDToAbsTime(double jd);
         static void JD2YMDHMS(double jd, int32_t& year, int32_t& month, int32_t& day,
                                  int32_t& hour, int32_t& minute, double& second);
-        static void DOY2MD(int32_t Year, int32_t DayOfYear, int32_t *Month, int32_t *Day);
+        static void DOY2MD(int16_t Year, int16_t DayOfYear, int16_t &Month, int16_t &Day);
         static double DateToAbsTime(int32_t Year, int32_t Month, int32_t Day, int32_t Hour, int32_t Minute, double Second);
-        static void JDToGpsTime(double JD, int32_t *GpsRollover, int16_t *GpsWeek, double *GpsSecond);
-        static void GpsTimeToJD(int32_t GpsRollover, int16_t GpsWeek, double GpsSecond, double *JD);
+        static void JDToGpsTime(double JD, int32_t &GpsRollover, int16_t &GpsWeek, double &GpsSecond);
+        static void GpsTimeToJD(int32_t GpsRollover, int16_t GpsWeek, double GpsSecond, double &JD);
 
         static void ECEF2LLA(double x, double y, double z, double& latitude, double& longitude, double& altitude);
 

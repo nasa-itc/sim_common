@@ -56,6 +56,12 @@ namespace Nos3
         std::vector<std::string> get_lines(void) const {return _lines;}
 
         //@}
+
+        /// @name Static Methods
+        //@{
+        static void parse_double_vector(const std::string& text, std::vector<double>& dv);            
+        //@}
+
     private:
         // Private data
         std::vector<std::string> _lines;

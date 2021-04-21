@@ -110,14 +110,29 @@ namespace Nos3
     /**********************************************************************/
     /*  Find Month, Day, given Day of Year                                */
     /*  Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.  */
+    /*  Chapter 7, pp. 62, 66                                             */
 
-    void SimCoordinateTransformations::DOY2MD(int32_t Year, int32_t DayOfYear, int32_t *Month, int32_t *Day)
+    void SimCoordinateTransformations::DOY2MD(int16_t Year, int16_t DayOfYear, int16_t &Month, int16_t &Day)
     {
-          int32_t K;
+          int16_t K;
 
           if (Year % 4 == 0) 
           {
-             K = 1;
+              if (Year % 100 == 0) 
+              {
+                  if (Year % 400 == 0)
+                  {
+                      K = 1;
+                  }
+                  else 
+                  {
+                      K = 2;
+                  }
+              }
+              else
+              {
+                  K = 1;
+              }
           }
           else 
           {
@@ -126,14 +141,14 @@ namespace Nos3
 
           if (DayOfYear < 32) 
           {
-             *Month = 1;
+             Month = 1;
           }
           else 
           {
-             *Month = (int32_t) (9.0*(K+DayOfYear)/275.0+0.98);
+             Month = (int16_t) (9.0*(K+DayOfYear)/275.0+0.98);
           }
 
-          *Day = DayOfYear - 275*(*Month)/9 + K*(((*Month)+9)/12) + 30;
+          Day = DayOfYear - 275*(Month)/9 + K*(((Month)+9)/12) + 30;
 
     }
 
@@ -173,21 +188,21 @@ namespace Nos3
     /* GPS Epoch is 6 Jan 1980 00:00:00.0 which is JD = 2444244.5         */
     /* GPS Time is expressed in weeks and seconds                         */
     /* GPS Time rolls over every 1024 weeks                               */
-    void SimCoordinateTransformations::JDToGpsTime(double JD, int32_t *GpsRollover, int16_t *GpsWeek, double *GpsSecond)
+    void SimCoordinateTransformations::JDToGpsTime(double JD, int32_t &GpsRollover, int16_t &GpsWeek, double &GpsSecond)
     {
           double DaysSinceEpoch, DaysSinceRollover, DaysSinceWeek;
 
           DaysSinceEpoch = JD - 2444244.5;
-          *GpsRollover = (int32_t) (DaysSinceEpoch/7168.0);
-          DaysSinceRollover = DaysSinceEpoch - 7168.0*((double) *GpsRollover);
-          *GpsWeek = (int32_t) (DaysSinceRollover/7.0);
-          DaysSinceWeek = DaysSinceRollover - 7.0*((double) *GpsWeek);
-          *GpsSecond = DaysSinceWeek*86400.0;
+          GpsRollover = (int32_t) (DaysSinceEpoch/7168.0);
+          DaysSinceRollover = DaysSinceEpoch - 7168.0*((double) GpsRollover);
+          GpsWeek = (int32_t) (DaysSinceRollover/7.0);
+          DaysSinceWeek = DaysSinceRollover - 7.0*((double) GpsWeek);
+          GpsSecond = DaysSinceWeek*86400.0;
     }
 
-    void SimCoordinateTransformations::GpsTimeToJD(int32_t GpsRollover, int16_t GpsWeek, double GpsSecond, double *JD)
+    void SimCoordinateTransformations::GpsTimeToJD(int32_t GpsRollover, int16_t GpsWeek, double GpsSecond, double &JD)
     {
-        *JD = GpsRollover * 7168.0 + GpsWeek * 7.0 + GpsSecond/86400.0 + 2444244.5;
+        JD = GpsRollover * 7168.0 + GpsWeek * 7.0 + GpsSecond/86400.0 + 2444244.5;
     }
 
     /* Fundamentals of Astrodynamics and Applications, 3rd edition, David A. Vallado,
@@ -255,7 +270,6 @@ namespace Nos3
         sim_logger->trace("SimCoordinateTransformations::ECEF2LLA:  Outputs: lambda = %12.8f, phi_gd = %12.8f, h_ellp = %12.4f",
             lambda, phi_gd, h_ellp);
     }
-
 
     /*************************************************************************
      * Private helper methods
