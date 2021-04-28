@@ -183,7 +183,8 @@ namespace Nos3
         static std::vector<uint8_t> double_to_uint8_vector(const double& in_data)
         {
             int64_t ival;
-            static_assert(sizeof(double) == sizeof(int64_t)); // not portable, but no surprises on the COSMOS end either and our assumed platform has 64 bit doubles
+            static_assert(sizeof(double) == sizeof(int64_t), 
+                "On this platform, double is not 64 bits.  This will cause issues with sending telemetry to COSMOS."); // not portable, but no surprises on the COSMOS end either and our assumed platform has 64 bit doubles
             std::memcpy(&ival, &in_data, sizeof(in_data));
 
             std::vector<uint8_t> out_data;
