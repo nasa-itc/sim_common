@@ -34,6 +34,8 @@ namespace Nos3
     /*************************************************************************
      * Static Methods
      *************************************************************************/
+    /* This function is agnostic to the TT-to-UTC offset.  You get out    */
+    /* what you put in. */
     void SimCoordinateTransformations::AbsTime2YMDHMS(double abs_time, int32_t& year, int32_t& month, int32_t& day,
                                  int32_t& hour, int32_t& minute, double& second)
     {
@@ -42,6 +44,8 @@ namespace Nos3
 
     /**********************************************************************/
     /* AbsTime is elapsed seconds since J2000 epoch                       */
+    /* This function is agnostic to the TT-to-UTC offset.  You get out    */
+    /* what you put in. */
     double SimCoordinateTransformations::AbsTimeToJD(double abs_time)
     {
         return (abs_time/86400.0 + 2451545.0);
@@ -49,14 +53,18 @@ namespace Nos3
 
     /**********************************************************************/
     /* AbsTime is elapsed seconds since J2000 epoch                       */
+    /* This function is agnostic to the TT-to-UTC offset.  You get out    */
+    /* what you put in. */
     double SimCoordinateTransformations::JDToAbsTime(double jd)
     {
         return ((jd - 2451545.0) * 86400.0);
     }
 
     /**********************************************************************/
-    /*   Convert Julian Day to Year, Month, Day, Hour, Minute, and Second */
-    /*   Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991. */
+    /* Convert Julian Day to Year, Month, Day, Hour, Minute, and Second   */
+    /* Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.   */
+    /* This function is agnostic to the TT-to-UTC offset.  You get out    */
+    /* what you put in. */
 
     void SimCoordinateTransformations::JD2YMDHMS(double jd, int32_t& year, int32_t& month, int32_t& day,
                                  int32_t& hour, int32_t& minute, double& second)
@@ -153,11 +161,13 @@ namespace Nos3
     }
 
     /**********************************************************************/
-    /*  Convert Year, Month, Day, Hour, Minute and Second to              */
-    /*  "Absolute Time", i.e. seconds elapsed since J2000 epoch.          */
-    /*  J2000 = 2451545.0 TT  =  01 Jan 2000 12:00:00.00 TT               */
-    /*  Year, Month, Day assumed in Gregorian calendar. (Not true < 1582) */
-    /*  Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.  */
+    /* Convert Year, Month, Day, Hour, Minute and Second to               */
+    /* "Absolute Time", i.e. seconds elapsed since J2000 epoch.           */
+    /* J2000 = 2451545.0 TT  =  01 Jan 2000 12:00:00.00 TT                */
+    /* Year, Month, Day assumed in Gregorian calendar. (Not true < 1582)  */
+    /* Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.   */
+    /* This function is agnostic to the TT-to-UTC offset.  You get out    */
+    /* what you put in. */
 
     double SimCoordinateTransformations::DateToAbsTime(int32_t Year, int32_t Month, int32_t Day, int32_t Hour,
        int32_t Minute, double Second)
@@ -188,6 +198,7 @@ namespace Nos3
     /* GPS Epoch is 6 Jan 1980 00:00:00.0 which is JD = 2444244.5         */
     /* GPS Time is expressed in weeks and seconds                         */
     /* GPS Time rolls over every 1024 weeks                               */
+    /* This function requires JD in TT                                    */
     void SimCoordinateTransformations::JDToGpsTime(double JD, int32_t &GpsRollover, int16_t &GpsWeek, double &GpsSecond)
     {
           double DaysSinceEpoch, DaysSinceRollover, DaysSinceWeek;
@@ -200,6 +211,7 @@ namespace Nos3
           GpsSecond = DaysSinceWeek*86400.0;
     }
 
+    /* This function yields JD in TT                                      */
     void SimCoordinateTransformations::GpsTimeToJD(int32_t GpsRollover, int16_t GpsWeek, double GpsSecond, double &JD)
     {
         JD = GpsRollover * 7168.0 + GpsWeek * 7.0 + GpsSecond/86400.0 + 2444244.5;
