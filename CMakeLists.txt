@@ -4,6 +4,8 @@ find_package(Boost REQUIRED QUIET COMPONENTS program_options filesystem)
 find_package(ITC_Common REQUIRED QUIET COMPONENTS itc_logger)
 find_package(NOSENGINE REQUIRED QUIET COMPONENTS common)
 
+execute_process(COMMAND git describe --abbrev=4 --dirty --always --tags OUTPUT_VARIABLE GIT_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
+add_definitions(-DVERSION=\"${GIT_VERSION}\")
 add_definitions(-D_ENABLE_SOCKETS_)
 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})

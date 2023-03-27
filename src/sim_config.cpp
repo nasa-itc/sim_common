@@ -176,10 +176,10 @@ namespace Nos3
             boost::program_options::options_description generic("Generic options");
             generic.add_options()
             ("version,v", "print version string")
-            ("help", "produce help message")
+            ("help,h", "produce help message")
             ("config-file,f",
              boost::program_options::value<std::string>(&_config_filename)->
-             default_value("nos3-simulator.xml"))
+             default_value("nos3-simulator.xml"), "configuration file")
             ;
 
             // Options that can be on the command line or (more likely) in a configuration file
@@ -189,7 +189,7 @@ namespace Nos3
             config.add_options()
             ("log-config-file,l",
              boost::program_options::value<std::string>(&cmd_line_log_config_filename)->
-             default_value("")->
+             default_value("sim_log_config.xml")->
              composing(), "specify log configuration file name");
 
             // Ok, the option descriptions are created... now go get the options!
@@ -216,20 +216,30 @@ namespace Nos3
                 _config.put("nos3-configuration.common.log-config-file", "sim_log_config.xml");
             }
 
+            if (vm.count("help")) {
+                std::cout << generic << std::endl;
+                exit(1);
+            } else if (vm.count("version")) {
+                std::cout << "Version: " << VERSION << std::endl;
+                exit(2);
+            }
         }
         catch(boost::exception const &e)
         {
             std::cerr << "SimConfig::parse_options:  Error during option parsing prior to logger availability.  Error:  " <<
-                      boost::diagnostic_information(e) << std::endl;
+                      boost::diagnostic_information(e) << std::endl << "Try --help" << std::endl;
+            exit(3);
         }
         catch(std::exception e)
         {
             std::cerr << "SimConfig::parse_options:  Error during option parsing prior to logger availability.  Error:  " <<
-                      e.what() << std::endl;
+                      e.what() << std::endl << "Try --help" << std::endl;
+            exit(4);
         }
         catch(...)
         {
-            std::cerr << "SimConfig::parse_options:  Exception of unknown type." << std::endl;
+            std::cerr << "SimConfig::parse_options:  Exception of unknown type." << std::endl << "Try --help" << std::endl;
+            exit(5);
         }
     }
 
