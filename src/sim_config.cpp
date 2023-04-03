@@ -175,7 +175,6 @@ namespace Nos3
             // Generic options that can be on the command line
             boost::program_options::options_description generic("Generic options");
             generic.add_options()
-            ("version,v", "print version string")
             ("help,h", "produce help message")
             ("config-file,f",
              boost::program_options::value<std::string>(&_config_filename)->
@@ -219,9 +218,6 @@ namespace Nos3
             if (vm.count("help")) {
                 std::cout << generic << std::endl;
                 exit(1);
-            } else if (vm.count("version")) {
-                std::cout << "Version: " << VERSION << std::endl;
-                exit(2);
             }
         }
         catch(boost::exception const &e)
