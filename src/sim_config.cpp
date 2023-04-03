@@ -77,7 +77,7 @@ namespace Nos3
         } 
         else 
         {
-            sim_logger->warning("SimConfig::run_simulator:  Simulator %s is not active.  Not running.", simulator_name.c_str());
+            sim_logger->warning("SimConfig::run_simulator:  Simulator \"%s\" is not active in \"%s\".  Not running.\nTry --help", simulator_name.c_str(), _config_filename.c_str());
         }
     }
 
@@ -132,7 +132,7 @@ namespace Nos3
 
         if (sim_logger->is_level_enabled(ItcLogger::LOGGER_DEBUG)) 
         {
-            sim_logger->debug("SimConfig::get_config_for_simulator:  Configuration for simulator %s is:\n", simulator_name.c_str());
+            sim_logger->debug("SimConfig::get_config_for_simulator:  Configuration for simulator \"%s\" is:\n", simulator_name.c_str());
             std::ostringstream oss;
             #if BOOST_VERSION / 100 % 1000 < 56
                 write_xml(oss, sim_config, boost::property_tree::xml_writer_make_settings<char>(' ', 4));

@@ -30,8 +30,8 @@ main(int argc, char *argv[])
     // Determine the configuration and run the simulator
     Nos3::SimConfig sc(argc, argv);
     std::string simulator_name = sc.get_simulator();
-    Nos3::sim_logger->info("main:  %s simulator starting", simulator_name.c_str());
+    Nos3::sim_logger->info("main:  \"%s\" simulator starting", simulator_name.c_str());
     sc.run_simulator(simulator_name);
-    Nos3::sim_logger->info("main:  %s simulator terminating", simulator_name.c_str());
+    Nos3::sim_logger->info("main:  \"%s\" simulator terminating", simulator_name.c_str());
     return 0;
 }

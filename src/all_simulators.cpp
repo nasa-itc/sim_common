@@ -35,7 +35,7 @@ main(int argc, char *argv[])
     std::vector<std::string> names = sc.get_simulator_names();
     if (names.size() > 0) {
         for(std::vector<std::string>::size_type i = 1; i < names.size(); i++) {
-            Nos3::sim_logger->info("main:  Spawning thread for simulator %s", names[i].c_str());
+            Nos3::sim_logger->info("main:  Spawning thread for simulator \"%s\"", names[i].c_str());
             threads.push_back(new std::thread(std::bind(&Nos3::SimConfig::run_simulator, sc, names[i]), NULL)); // Spawn thread to run simulator
         }
 
