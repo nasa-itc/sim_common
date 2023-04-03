@@ -150,6 +150,11 @@ namespace Nos3
         return _config;
     }
 
+    std::string SimConfig::get_simulator(void) const
+    {
+        return _simulator;
+    }
+
     std::string SimConfig::to_string(void) const
     {
         std::ostringstream oss;
@@ -179,6 +184,8 @@ namespace Nos3
             ("config-file,f",
              boost::program_options::value<std::string>(&_config_filename)->
              default_value("nos3-simulator.xml"), "configuration file")
+            ("simulator,s", 
+             boost::program_options::value<std::string>(&_simulator), "simulator to run (-s is not required)")
             ;
 
             // Options that can be on the command line or (more likely) in a configuration file
@@ -191,9 +198,16 @@ namespace Nos3
              default_value("sim_log_config.xml")->
              composing(), "specify log configuration file name");
 
+            generic.add(config);
+
+            // Positional options
+            boost::program_options::positional_options_description pd;
+            pd.add("simulator", 1);
+
             // Ok, the option descriptions are created... now go get the options!
             boost::program_options::variables_map vm;
-            boost::program_options::store(boost::program_options::parse_command_line(argc, argv, generic.add(config)), vm);
+            //boost::program_options::store(boost::program_options::parse_command_line(argc, argv, generic.add(config)), vm);
+            boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(generic).positional(pd).run(), vm);
             boost::program_options::notify(vm);
 
             // Ok, that's all the options that can be specified on the command line... now go get any others (and all but the first one if they are
