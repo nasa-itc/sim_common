@@ -27,17 +27,11 @@ namespace Nos3
 int
 main(int argc, char *argv[])
 {
-    if (argc != 2) {
-        std:: cout << "FATAL ERROR:  Expected a single argument, the name of a simulator (from the config file) to start" << std::endl;
-        return 1;
-    }
-
-    std::string simulator_name(argv[1]);
-
     // Determine the configuration and run the simulator
     Nos3::SimConfig sc(argc, argv);
-    Nos3::sim_logger->info("main:  %s simulator starting", simulator_name.c_str());
+    std::string simulator_name = sc.get_simulator();
+    Nos3::sim_logger->info("main:  \"%s\" simulator starting", simulator_name.c_str());
     sc.run_simulator(simulator_name);
-    Nos3::sim_logger->info("main:  %s simulator terminating", simulator_name.c_str());
+    Nos3::sim_logger->info("main:  \"%s\" simulator terminating", simulator_name.c_str());
     return 0;
 }

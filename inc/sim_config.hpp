@@ -63,6 +63,9 @@ namespace Nos3
         /// \brief Returns a vector of strings containing the names of the simulators in the config file.
 		std::vector<std::string> get_simulator_names(void) const;
 
+        /// \brief Returns the name of the simulator specified on the command line.
+        std::string get_simulator(void) const;
+
         /// \brief Returns a string representation of this object.
         /// @return A string representing the data in this object.
         std::string to_string(void) const;
@@ -75,6 +78,7 @@ namespace Nos3
         // Private data
         boost::property_tree::ptree _config;
         std::string _config_filename;
+        std::string _simulator;
     };
 
 }

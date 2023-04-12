@@ -77,7 +77,7 @@ namespace Nos3
         } 
         else 
         {
-            sim_logger->warning("SimConfig::run_simulator:  Simulator %s is not active.  Not running.", simulator_name.c_str());
+            sim_logger->warning("SimConfig::run_simulator:  Simulator \"%s\" is not active in \"%s\".  Not running.\nTry --help", simulator_name.c_str(), _config_filename.c_str());
         }
     }
 
@@ -132,7 +132,7 @@ namespace Nos3
 
         if (sim_logger->is_level_enabled(ItcLogger::LOGGER_DEBUG)) 
         {
-            sim_logger->debug("SimConfig::get_config_for_simulator:  Configuration for simulator %s is:\n", simulator_name.c_str());
+            sim_logger->debug("SimConfig::get_config_for_simulator:  Configuration for simulator \"%s\" is:\n", simulator_name.c_str());
             std::ostringstream oss;
             #if BOOST_VERSION / 100 % 1000 < 56
                 write_xml(oss, sim_config, boost::property_tree::xml_writer_make_settings<char>(' ', 4));
@@ -148,6 +148,11 @@ namespace Nos3
     boost::property_tree::ptree SimConfig::get_config(void) const
     {
         return _config;
+    }
+
+    std::string SimConfig::get_simulator(void) const
+    {
+        return _simulator;
     }
 
     std::string SimConfig::to_string(void) const
@@ -175,11 +180,12 @@ namespace Nos3
             // Generic options that can be on the command line
             boost::program_options::options_description generic("Generic options");
             generic.add_options()
-            ("version,v", "print version string")
-            ("help", "produce help message")
+            ("help,h", "produce help message")
             ("config-file,f",
              boost::program_options::value<std::string>(&_config_filename)->
-             default_value("nos3-simulator.xml"))
+             default_value("nos3-simulator.xml"), "configuration file")
+            ("simulator,s", 
+             boost::program_options::value<std::string>(&_simulator), "simulator to run (-s is not required)")
             ;
 
             // Options that can be on the command line or (more likely) in a configuration file
@@ -189,12 +195,19 @@ namespace Nos3
             config.add_options()
             ("log-config-file,l",
              boost::program_options::value<std::string>(&cmd_line_log_config_filename)->
-             default_value("")->
+             default_value("sim_log_config.xml")->
              composing(), "specify log configuration file name");
+
+            generic.add(config);
+
+            // Positional options
+            boost::program_options::positional_options_description pd;
+            pd.add("simulator", 1);
 
             // Ok, the option descriptions are created... now go get the options!
             boost::program_options::variables_map vm;
-            boost::program_options::store(boost::program_options::parse_command_line(argc, argv, generic.add(config)), vm);
+            //boost::program_options::store(boost::program_options::parse_command_line(argc, argv, generic.add(config)), vm);
+            boost::program_options::store(boost::program_options::command_line_parser(argc, argv).options(generic).positional(pd).run(), vm);
             boost::program_options::notify(vm);
 
             // Ok, that's all the options that can be specified on the command line... now go get any others (and all but the first one if they are
@@ -216,20 +229,27 @@ namespace Nos3
                 _config.put("nos3-configuration.common.log-config-file", "sim_log_config.xml");
             }
 
+            if (vm.count("help")) {
+                std::cout << generic << std::endl;
+                exit(1);
+            }
         }
         catch(boost::exception const &e)
         {
             std::cerr << "SimConfig::parse_options:  Error during option parsing prior to logger availability.  Error:  " <<
-                      boost::diagnostic_information(e) << std::endl;
+                      boost::diagnostic_information(e) << std::endl << "Try --help" << std::endl;
+            exit(3);
         }
         catch(std::exception e)
         {
             std::cerr << "SimConfig::parse_options:  Error during option parsing prior to logger availability.  Error:  " <<
-                      e.what() << std::endl;
+                      e.what() << std::endl << "Try --help" << std::endl;
+            exit(4);
         }
         catch(...)
         {
-            std::cerr << "SimConfig::parse_options:  Exception of unknown type." << std::endl;
+            std::cerr << "SimConfig::parse_options:  Exception of unknown type." << std::endl << "Try --help" << std::endl;
+            exit(5);
         }
     }
 
