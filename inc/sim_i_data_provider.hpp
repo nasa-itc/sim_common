@@ -34,7 +34,7 @@ namespace Nos3
         //@{
         /// \brief Constructor taking a configuration object.
         /// @param  sc  The configuration for the simulation
-        SimIDataProvider(const boost::property_tree::ptree& config) {};
+        SimIDataProvider(__attribute__((unused)) const boost::property_tree::ptree& config) {};
         /// \brief Destructor.
         virtual ~SimIDataProvider() {};
         //@}
