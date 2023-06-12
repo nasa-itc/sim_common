@@ -72,7 +72,9 @@ namespace Nos3
                         // Set up the command node for this hardware model
                         _command_bus_name = v.second.get("bus-name", "command");
                         _command_node_name = v.second.get("node-name", "SimIHardwareModel");
-                        _command_bus.reset(new NosEngine::Client::Bus(_hub, config.get("common.nos-connection-string", "tcp://127.0.0.1:12001"),
+//                        _command_bus.reset(new NosEngine::Client::Bus(_hub, config.get("common.nos-connection-string", "tcp://127.0.0.1:12001"),
+//                            _command_bus_name));
+                        _command_bus.reset(new NosEngine::Client::Bus(_hub, config.get("common.nos-connection-string", "tcp://0.0.0.0:12001"),
                             _command_bus_name));
                         _command_node = _command_bus->get_or_create_data_node(_command_node_name);
                         _command_node->set_message_received_callback(std::bind(&SimIHardwareModel::command_callback, this, std::placeholders::_1));

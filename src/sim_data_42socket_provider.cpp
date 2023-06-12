@@ -37,7 +37,8 @@ namespace Nos3
 
     SimData42SocketProvider::SimData42SocketProvider(const boost::property_tree::ptree& config)
         : SimIDataProvider(config), _telemetry_socket_client_thread(NULL), _not_terminating(true), _command_port_connected(false),
-          _server_host(config.get("simulator.hardware-model.data-provider.hostname", "localhost")),
+//          _server_host(config.get("simulator.hardware-model.data-provider.hostname", "localhost")),
+          _server_host(config.get("simulator.hardware-model.data-provider.hostname", "fortytwo")),
           _server_command_port(config.get("simulator.hardware-model.data-provider.command-port", 0)), // default is no command port needed (0)... e.g. for sensor only hardware like IMUs, Star Trackers, etc.
           _max_connection_attempts(config.get("simulator.hardware-model.data-provider.max-connection-attempts", 5)),
           _retry_wait_seconds(config.get("simulator.hardware-model.data-provider.retry-wait-seconds", 5)),
@@ -153,7 +154,7 @@ namespace Nos3
             {
                 if (i == _max_connection_attempts)
                 {
-                    sim_logger->error("SimData42SocketProvider::connect_as_42_socket_client:  Maximum number of connection attempts readched.   Host %s, port %u failed to connect!", a_42_host.c_str(), a_42_port);
+                    sim_logger->error("SimData42SocketProvider::connect_as_42_socket_client:  Maximum number of connection attempts reached.   Host %s, port %u failed to connect!", a_42_host.c_str(), a_42_port);
                     return false;
                 }
                 else
