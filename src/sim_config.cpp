@@ -240,7 +240,7 @@ namespace Nos3
                       boost::diagnostic_information(e) << std::endl << "Try --help" << std::endl;
             exit(3);
         }
-        catch(std::exception e)
+        catch(std::exception &e)
         {
             std::cerr << "SimConfig::parse_options:  Error during option parsing prior to logger availability.  Error:  " <<
                       e.what() << std::endl << "Try --help" << std::endl;
