@@ -36,12 +36,12 @@ namespace Nos3
      *************************************************************************/
 
     SimData42SocketProvider::SimData42SocketProvider(const boost::property_tree::ptree& config)
-        : SimIDataProvider(config), _telemetry_socket_client_thread(NULL), _not_terminating(true), _command_port_connected(false),
+        : SimIDataProvider(config),
           _server_host(config.get("simulator.hardware-model.data-provider.hostname", "localhost")),
           _server_command_port(config.get("simulator.hardware-model.data-provider.command-port", 0)), // default is no command port needed (0)... e.g. for sensor only hardware like IMUs, Star Trackers, etc.
           _max_connection_attempts(config.get("simulator.hardware-model.data-provider.max-connection-attempts", 5)),
           _retry_wait_seconds(config.get("simulator.hardware-model.data-provider.retry-wait-seconds", 5)),
-          _absolute_start_time(config.get("common.absolute-start-time", 552110400.0))
+          _absolute_start_time(config.get("common.absolute-start-time", 552110400.0)), _telemetry_socket_client_thread(NULL), _not_terminating(true), _command_port_connected(false)
     {
         SimData42SocketProvider::connect_command_socket_as_42_socket_client();
     }
@@ -65,7 +65,7 @@ namespace Nos3
      {
         if (_command_port_connected) {
             ssize_t bytes_sent = send(_command_socket_fd, message.c_str(), message.length(), 0);
-            if (bytes_sent == message.length()) {
+            if (bytes_sent == (ssize_t)message.length()) {
                 sim_logger->debug("SimData42SocketProvider::send_command_to_socket:  Successfully sent command to host %s, port %u.  Command %s", _server_host.c_str(), _server_command_port, message.c_str());
             } else {
                 sim_logger->error("SimData42SocketProvider::send_command_to_socket:  Unsuccessful sending command to host %s, port %u.  Bytes to send %u, bytes sent/return value %u.  Command %s",

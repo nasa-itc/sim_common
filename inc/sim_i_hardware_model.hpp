@@ -215,7 +215,7 @@ namespace Nos3
         std::atomic<bool>                            _keep_running;
         const double                                 _absolute_start_time;
         const int64_t                                _sim_microseconds_per_tick;
-        const int64_t                                _real_microseconds_per_tick;
+        int64_t                                      _real_microseconds_per_tick;
         NosEngine::Transport::TransportHub           _hub;
         std::string                                  _command_bus_name;
         std::string                                  _command_node_name;

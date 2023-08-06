@@ -18,7 +18,7 @@
 #include <iomanip>
 #include <limits>
 
-//#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -37,7 +37,25 @@ namespace Nos3
 
     Sim42DataPoint::Sim42DataPoint(std::vector<std::string> &message) : _lines(message)
     {
+        for (std::vector<std::string>::const_iterator iter = _lines.begin(); iter != _lines.end(); iter++) {
+            size_t equals = iter->find("=");
+            if (equals != std::string::npos) {
+                std::string key(iter->substr(0, equals));
+                boost::trim(key);
+                std::string value(iter->substr(equals+1));
+                boost::trim(value);
+                _key_values.insert({key, value});
+            } else {
+                std::string key(*iter);
+                boost::trim(key);
+                _key_values.insert({key, ""});
+            }
+        }
         sim_logger->trace("Sim42DataPoint::Sim42DataPoint:  Constructed data point with:  %s", to_string().c_str());
+        sim_logger->trace("Sim42DataPoint::Sim42DataPoint - key/values:");
+        for (std::map<std::string, std::string>::const_iterator iter = _key_values.begin(); iter != _key_values.end(); iter++) {
+            sim_logger->trace("  %s, %s", iter->first.c_str(), iter->second.c_str());
+        }
     }
 
     /*************************************************************************
@@ -56,6 +74,9 @@ namespace Nos3
         return ss.str();
     }
 
+    std::string Sim42DataPoint::get_value_for_key(std::string key) {
+        return _key_values[key];
+    }
 
     /*************************************************************************
      * Static methods

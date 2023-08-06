@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <map>
 
 #include <sim_i_data_point.hpp>
 
@@ -55,6 +56,10 @@ namespace Nos3
         /// @return     A vector of strings representing the 42 simulation data point
         std::vector<std::string> get_lines(void) const {return _lines;}
 
+        /// \brief Returns the value for the key stored in the 42 simulation data point
+        /// @param key  The key to find
+        /// @return     The value corresponding to the input key
+        std::string get_value_for_key(std::string key);
         //@}
 
         /// @name Static Methods
@@ -65,6 +70,7 @@ namespace Nos3
     private:
         // Private data
         std::vector<std::string> _lines;
+        std::map<std::string, std::string> _key_values;
     };
 
 }
