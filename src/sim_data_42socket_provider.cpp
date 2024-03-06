@@ -68,7 +68,7 @@ namespace Nos3
             if (bytes_sent == (ssize_t)message.length()) {
                 sim_logger->debug("SimData42SocketProvider::send_command_to_socket:  Successfully sent command to host %s, port %u.  Command %s", _server_host.c_str(), _server_command_port, message.c_str());
             } else {
-                sim_logger->error("SimData42SocketProvider::send_command_to_socket:  Unsuccessful sending command to host %s, port %u.  Bytes to send %u, bytes sent/return value %u.  Command %s",
+                sim_logger->error("SimData42SocketProvider::send_command_to_socket:  Unsuccessful sending command to host %s, port %u.  Bytes to send %lu, bytes sent/return value %lu.  Command %s",
                     _server_host.c_str(), _server_command_port, message.length(), bytes_sent, message.c_str());
             }
         } else {
