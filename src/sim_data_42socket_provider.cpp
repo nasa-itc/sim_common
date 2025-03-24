@@ -153,7 +153,7 @@ namespace Nos3
             {
                 if (i == _max_connection_attempts)
                 {
-                    sim_logger->error("SimData42SocketProvider::connect_as_42_socket_client:  Maximum number of connection attempts readched.   Host %s, port %u failed to connect!", a_42_host.c_str(), a_42_port);
+                    sim_logger->error("SimData42SocketProvider::connect_as_42_socket_client:  Maximum number of connection attempts reached.   Host %s, port %u failed to connect!", a_42_host.c_str(), a_42_port);
                     return false;
                 }
                 else
