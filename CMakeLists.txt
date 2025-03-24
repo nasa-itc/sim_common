@@ -2,7 +2,7 @@ project(sim_common)
 
 find_package(Boost REQUIRED QUIET COMPONENTS program_options filesystem)
 find_package(ITC_Common REQUIRED QUIET COMPONENTS itc_logger)
-find_package(NOSENGINE REQUIRED QUIET COMPONENTS common)
+find_package(NOSENGINE REQUIRED QUIET COMPONENTS common transport client server)
 
 add_definitions(-D_ENABLE_SOCKETS_)
 
@@ -13,6 +13,7 @@ include_directories(inc
 )
 
 set(sim_common_src
+    src/ascii_msg_server.cpp
     src/sim_config.cpp
     src/sim_hardware_model_factory.cpp
     src/sim_data_provider_factory.cpp
@@ -46,3 +47,8 @@ add_executable(nos3-single-simulator src/single_simulator.cpp)
 set_target_properties(nos3-single-simulator PROPERTIES COMPILE_FLAGS "" LINK_FLAGS "")
 target_link_libraries(nos3-single-simulator sim_common)
 install(TARGETS nos3-single-simulator RUNTIME DESTINATION bin)
+
+add_executable(nos3-sim-cmdbus-bridge src/sim_cmdbus_bridge.cpp)
+set_target_properties(nos3-sim-cmdbus-bridge PROPERTIES COMPILE_FLAGS "" LINK_FLAGS "")
+target_link_libraries(nos3-sim-cmdbus-bridge sim_common)
+install(TARGETS nos3-sim-cmdbus-bridge RUNTIME DESTINATION bin)

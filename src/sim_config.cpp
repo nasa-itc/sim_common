@@ -42,7 +42,7 @@ namespace Nos3
      * Constructors
      *************************************************************************/
 
-    SimConfig::SimConfig(int argc, char *argv[])
+    SimConfig::SimConfig(int argc, char *argv[]) : _hardware_model(0)
     {
         parse_options(argc, argv);
 
@@ -58,11 +58,17 @@ namespace Nos3
         //sim_logger->debug("SimConfig::SimConfig:  Configuration values:\n%s", to_string().c_str());
     }
 
+    SimConfig::~SimConfig()
+    {
+        if (_hardware_model)
+            delete _hardware_model;
+    }
+
     /*************************************************************************
      * Accessors
      *************************************************************************/
 
-    void SimConfig::run_simulator(std::string simulator_name) const
+    void SimConfig::run_simulator(std::string simulator_name)
     {
         sim_logger->debug("SimConfig::run_simulator:  SimConfig is created, logger is valid, and run_simulator is starting.");
 
@@ -72,13 +78,18 @@ namespace Nos3
             std::string model_type = config.get("simulator.hardware-model.type", "");
 
             // Create an instance of the simulator hardware model and run it
-            std::unique_ptr<SimIHardwareModel> hardware_model(SimHardwareModelFactory::Instance().Create(model_type, config));
-            hardware_model->run();
+            _hardware_model = SimHardwareModelFactory::Instance().Create(model_type, config);
+            _hardware_model->run();
         } 
         else 
         {
             sim_logger->warning("SimConfig::run_simulator:  Simulator \"%s\" is not active in \"%s\".  Not running.\nTry --help", simulator_name.c_str(), _config_filename.c_str());
         }
+    }
+
+    void SimConfig::stop_simulator()
+    {
+        _hardware_model->stop();
     }
 
 	std::vector<std::string> SimConfig::get_simulator_names(void) const
