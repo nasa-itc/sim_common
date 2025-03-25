@@ -58,6 +58,7 @@ namespace Nos3
             std::stringstream stream(msg);
             boost::property_tree::ptree pt;
             std::string node_name = "";
+            std::string cmd = "";
 
             boost::property_tree::read_json(stream, pt);
 
@@ -68,14 +69,15 @@ namespace Nos3
             try
             {
                 node_name = pt.get<std::string>("node");
+                cmd = pt.get<std::string>("cmd");
 
-                sim_logger->info("Received new message destined for %s: %s",
-                    node_name.c_str(), msg.c_str());
-
+                sim_logger->info("Received new message destined for %s with command %s",
+                    node_name.c_str(), cmd.c_str());
+                
                 // Add 1 since C++ string size does not include null termination character.
                 // We want this character sent so the buffer on the receive side is
                 // interpreted as a valid C string.
-                _command_node->send_non_confirmed_message_async(node_name, msg.size()+1, msg.c_str());;
+                _command_node->send_non_confirmed_message_async(node_name, cmd.size()+1, cmd.c_str());;
             }
             catch(const std::exception& e)
             {
