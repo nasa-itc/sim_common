@@ -27,11 +27,12 @@
 #include <boost/foreach.hpp>
 
 #include <ItcLogger/Logger.hpp>
+#include <Client/Bus.hpp>
+#include <Client/DataNode.hpp>
+#include <Utility/Buffer.hpp>
 #include <Utility/BufferOverlay.hpp>
 #include <Common/DataBufferOverlay.hpp>
 #include <Common/Message.hpp>
-#include <Client/Bus.hpp>
-#include <Client/DataNode.hpp>
 
 #include <sim_hardware_model_maker.hpp>
 #define REGISTER_HARDWARE_MODEL(T,K) static Nos3::SimHardwareModelMaker<T> maker(K) // T = type, K = key
@@ -103,6 +104,14 @@ namespace Nos3
             {
                 std::this_thread::sleep_for(std::chrono::microseconds(_real_microseconds_per_tick));
             }
+        }
+
+        /** \brief Method to stop the simulator.  The run method should monitor
+         *  the flag set by this function and return when it is false.
+         */
+        void stop()
+        {
+            _keep_running.store(false);
         }
 
         /** \brief Method to determine what to do with a command to the simulator received on the command bus.  The default is to do nothing.

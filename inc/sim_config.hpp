@@ -28,6 +28,7 @@
 
 namespace Nos3
 {
+    class SimIHardwareModel;
 
     /// \brief Class to describe the configuration for the simulation.
     class SimConfig
@@ -45,12 +46,16 @@ namespace Nos3
         SimConfig(int argc, char *argv[]);
         //@}
 
+        ~SimConfig();
+
         /// @name Accessors
         //@{
 
         /// \brief Given a simulator name, this method determines the configuration for the simulator and runs it.
         /// @param simulator  The name of the simulator to run.
-        void run_simulator(std::string simulator_name) const;
+        void run_simulator(std::string simulator_name);
+
+        void stop_simulator();
 
         /// \brief Given a simulator name, this method returns a property tree of common and simulator specific configuration data for the simulator.
         /// @param simulator  The name of the simulator to create a property tree configuration for.
@@ -79,6 +84,7 @@ namespace Nos3
         boost::property_tree::ptree _config;
         std::string _config_filename;
         std::string _simulator;
+        SimIHardwareModel* _hardware_model;
     };
 
 }
