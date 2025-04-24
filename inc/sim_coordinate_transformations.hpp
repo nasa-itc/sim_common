@@ -21,6 +21,7 @@
 #define SIM_LOGGER                "nos3.sim"
 
 #include <cstdint>
+#include <vector>
 #include <cmath>
 
 namespace Nos3
@@ -65,6 +66,11 @@ namespace Nos3
 
         static void ECEF2LLA(double x, double y, double z, double& latitude, double& longitude, double& altitude);
 
+        static void Q2C(std::vector<double> quaternion, std::vector<std::vector<double>>& matrix);
+        static void MTxV(std::vector<std::vector<double>> matrix, std::vector<double> vector, std::vector<double>& output);
+        static double dot(std::vector<double> u, std::vector<double> v);
+        static double norm(std::vector<double> v);
+        static void SxV(double scalar, std::vector<double> vector, std::vector<double>& output);
        //@}
        
        static const SimConstants SIM_CONSTANTS;
