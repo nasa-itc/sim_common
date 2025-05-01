@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 {
     signal(SIGINT, signal_handler);
 
-    std::string simulator_name = "cmdbus_bridge";
+    std::string simulator_name = "cmdbus-bridge";
 
     // Determine the configuration and run the simulator
     sim_cfg = new Nos3::SimConfig(argc, argv);
