@@ -19,7 +19,6 @@ set(sim_common_src
     src/sim_data_provider_factory.cpp
     src/sim_data_42socket_provider.cpp
     src/sim_42data_point.cpp
-    src/sim_data_shmem_provider.cpp
     src/sim_shmem_data_point.cpp
     src/sim_coordinate_transformations.cpp
 )
