@@ -4,7 +4,7 @@
 /*
 ** Includes
 */
-#include <boost/interprocess/sync/interprocess_mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
 /*
 ** Defines
@@ -18,7 +18,7 @@ namespace Nos3
     namespace bip = boost::interprocess;
 
     struct BlackboardData {
-        bip::interprocess_mutex mutex;
+        boost::shared_mutex mutex;
         double qn[4];
         double wn[3];
         double svb[3];
