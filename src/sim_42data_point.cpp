@@ -69,7 +69,7 @@ namespace Nos3
         ss << std::fixed << std::setfill(' ');
         ss << "42 Data Point: ";
         for (std::vector<std::string>::const_iterator it = _lines.begin(); it != _lines.end(); ++it) {
-            ss << *it;
+            ss << *it << std::endl;
         }
         return ss.str();
     }
