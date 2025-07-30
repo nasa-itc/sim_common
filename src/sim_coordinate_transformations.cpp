@@ -283,6 +283,84 @@ namespace Nos3
             lambda, phi_gd, h_ellp);
     }
 
+    /*
+    ** HELPERS FOR IN SUN CALCULATIONS - pulled from utilities.rb
+    */
+
+    /*
+    ** Q2C - Turns Quaternion Vector into Matrix form
+    */
+    void SimCoordinateTransformations::Q2C(std::vector<double> quaternion, std::vector<std::vector<double>>& matrix)
+    {  
+        //calculate necessary numbers
+        double twoQ00 = 2.0*quaternion[0]*quaternion[0];
+        double twoQ11 = 2.0*quaternion[1]*quaternion[1];
+        double twoQ22 = 2.0*quaternion[2]*quaternion[2];
+        double twoQ01 = 2.0*quaternion[0]*quaternion[1];
+        double twoQ02 = 2.0*quaternion[0]*quaternion[2];
+        double twoQ03 = 2.0*quaternion[0]*quaternion[3];
+        double twoQ12 = 2.0*quaternion[1]*quaternion[2];
+        double twoQ13 = 2.0*quaternion[1]*quaternion[3];
+        double twoQ23 = 2.0*quaternion[2]*quaternion[3];
+        
+        //initialize output to an identity matrix 
+        matrix.resize(3, std::vector<double>(3));
+
+        matrix[0][0] = 1.0;
+        matrix[1][1] = 1.0;
+        matrix[2][2] = 1.0;
+
+        matrix[0][0] = 1.0-(twoQ11+twoQ22);
+        matrix[0][1] = twoQ01+twoQ23;
+        matrix[0][2] = twoQ02-twoQ13;
+        matrix[1][0] = twoQ01-twoQ23;
+        matrix[1][1] = 1.0-(twoQ22+twoQ00);
+        matrix[1][2] = twoQ12+twoQ03;
+        matrix[2][0] = twoQ02+twoQ13;
+        matrix[2][1] = twoQ12-twoQ03;
+        matrix[2][2] = 1.0-(twoQ00+twoQ11);
+    }
+
+    /*
+    ** MTxV - Multiplies Matrix Transverse by Vector
+    */
+    void SimCoordinateTransformations::MTxV(std::vector<std::vector<double>> matrix, std::vector<double> vector, std::vector<double>& output)
+    {   
+        output.resize(3);
+
+        output[0] = matrix[0][0]*vector[0] + matrix[1][0]*vector[1] + matrix[2][0]*vector[2];
+        output[1] = matrix[0][1]*vector[0] + matrix[1][1]*vector[1] + matrix[2][1]*vector[2];
+        output[2] = matrix[0][2]*vector[0] + matrix[1][2]*vector[1] + matrix[2][2]*vector[2];
+    }
+
+    /*
+    ** Calculate the Dot Product of the input Vectors
+    */
+    double SimCoordinateTransformations::dot(std::vector<double> u, std::vector<double> v)
+    {
+        return u[0]*v[0] + u[1]*v[1] + u[2]*v[2];
+    }
+
+    /*
+    ** norm - Gives the scalar value of a vector
+    */
+    double SimCoordinateTransformations::norm(std::vector<double> u)
+    {
+        return sqrt(dot(u,u));
+    }
+
+    /*
+    ** SxV - Multiplies a Vector by a Scalar and gives the resultant Vector
+    */
+    void SimCoordinateTransformations::SxV(double scalar, std::vector<double> vector, std::vector<double>& output)
+    {   
+        output.resize(3);
+
+        output[0] = scalar*vector[0];
+        output[1] = scalar*vector[1];
+        output[2] = scalar*vector[2];
+    }
+
     /*************************************************************************
      * Private helper methods
      *************************************************************************/

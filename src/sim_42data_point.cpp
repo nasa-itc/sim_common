@@ -85,7 +85,10 @@ namespace Nos3
     void Sim42DataPoint::parse_double_vector(const std::string& text, std::vector<double>& dv) 
     {
         dv.clear();
-        std::istringstream iss(text);
+        std::string t = text;
+        t.erase(std::remove(t.begin(), t.end(), '['), t.end());
+        t.erase(std::remove(t.begin(), t.end(), ']'), t.end());
+        std::istringstream iss(t);
         for (std::string s; iss >> s; )
             dv.push_back(std::stod(s));
     }
