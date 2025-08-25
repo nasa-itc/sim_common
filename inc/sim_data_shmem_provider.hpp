@@ -56,7 +56,7 @@ namespace Nos3
         {
             boost::shared_ptr<SimShmemDataPoint> dp;
             {
-                bip::scoped_lock<bip::interprocess_mutex> lock(_blackboard_data->mutex);
+                boost::shared_lock<boost::shared_mutex> lock(_blackboard_data->mutex);
                 dp = boost::shared_ptr<SimShmemDataPoint>(
                     new SimShmemDataPoint(_blackboard_data->svb, _blackboard_data->bvb, _blackboard_data->Hvb, 
                                           _blackboard_data->GyroRate, _blackboard_data->CSSValid, _blackboard_data->CSSIllum, 
