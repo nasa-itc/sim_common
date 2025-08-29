@@ -56,14 +56,12 @@ namespace Nos3
         {
             boost::shared_ptr<SimShmemDataPoint> dp;
             {
-                boost::shared_lock<boost::shared_mutex> lock(_blackboard_data->mutex);
                 dp = boost::shared_ptr<SimShmemDataPoint>(
                     new SimShmemDataPoint(_blackboard_data->svb, _blackboard_data->bvb, _blackboard_data->Hvb, 
                                           _blackboard_data->GyroRate, _blackboard_data->CSSValid, _blackboard_data->CSSIllum, 
                                           _blackboard_data->FSSValid, _blackboard_data->FSSSunAng, _blackboard_data->STValid,
                                           _blackboard_data->STqn, _blackboard_data->GPSPosN, _blackboard_data->GPSVelN, 
                                           _blackboard_data->AccelAcc, _blackboard_data->WhlH));
-                // lock is released when scope ends
             }
             return dp;
         }

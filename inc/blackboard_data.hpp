@@ -16,7 +16,6 @@
 namespace Nos3
 {
     struct BlackboardData {
-        boost::shared_mutex mutex;
         double svb[3];
         double bvb[3];
         double Hvb[3];
