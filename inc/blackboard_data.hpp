@@ -26,8 +26,14 @@ namespace Nos3
         double FSSSunAng[2];
         int    STValid;
         double STqn[4];
+        double AbsTime;
+        int    GPSWeek;
+        int    GPSSec;
+        double GPSFracSec;
         double GPSPosN[3];
         double GPSVelN[3];
+        double GPSPosW[3];
+        double GPSVelW[3];
         double AccelAcc[3];
         double WhlH[3];
     };

@@ -45,6 +45,18 @@ namespace Nos3
                 std::string value(iter->substr(equals+1));
                 boost::trim(value);
                 _key_values.insert({key, value});
+            } else if(iter->compare(0, 4, "TIME") == 0) {
+                std::string value(iter->substr(4));
+                boost::trim(value);
+                _key_values.insert({"TIME", value});
+                parse_time(value);
+                long Month, Day;
+                DOY2MD(std::stol(_key_values["YEAR"]), std::stol(_key_values["DOY"]), &Month, &Day);
+                _key_values.insert({"MONTH", std::to_string(Month)});
+                _key_values.insert({"DAY", std::to_string(Day)});
+                _key_values.insert({"ABSTIME", 
+                    std::to_string(DateToTime(std::stol(_key_values["YEAR"]), Month, Day, 
+                    std::stol(_key_values["HOUR"]), std::stol(_key_values["MINUTE"]), std::stod(_key_values["SECOND"])))});
             } else {
                 std::string key(*iter);
                 boost::trim(key);
@@ -61,6 +73,92 @@ namespace Nos3
     /*************************************************************************
      * Accessors
      *************************************************************************/
+
+    void Sim42DataPoint::parse_time(const std::string& value)
+    {
+        std::vector<std::string> tokens;
+        std::istringstream iss(value);
+        std::string token;
+        while (std::getline(iss, token, '-')) {
+            tokens.push_back(token);
+        }
+        std::string key = "YEAR";
+        _key_values.insert({key, tokens[0]});
+        key = "DOY";
+        _key_values.insert({key, tokens[1]});
+        std::string time(tokens[2]);
+
+        tokens.clear();
+        std::istringstream iss2(time);
+        while (std::getline(iss2, token, ':')) {
+            tokens.push_back(token);
+        }
+        key = "HOUR";
+        _key_values.insert({key, tokens[0]});
+        key = "MINUTE";
+        _key_values.insert({key, tokens[1]});
+        key = "SECOND";
+        _key_values.insert({key, tokens[2]});
+    }
+
+    /**********************************************************************/
+    /*  Find Month, Day, given Day of Year                                */
+    /*  Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.  */
+    /*   This function is agnostic to the TT-to-UTC offset.  You get out  */
+    /*   what you put in.                                                 */
+    void Sim42DataPoint::DOY2MD(long Year, long DayOfYear, long *Month, long *Day)
+    {
+        long K;
+
+        if (Year % 4 == 0) {
+            K = 1;
+        }
+        else {
+            K = 2;
+        }
+
+        if (DayOfYear < 32) {
+            *Month = 1;
+        }
+        else {
+            *Month = (long) (9.0*(K+DayOfYear)/275.0+0.98);
+        }
+
+        *Day = DayOfYear - 275*(*Month)/9 + K*(((*Month)+9)/12) + 30;
+
+    }
+
+    /**********************************************************************/
+    /*  Convert Year, Month, Day, Hour, Minute and Second to              */
+    /*  "Time", i.e. seconds elapsed since J2000 epoch.                   */
+    /*  Year, Month, Day assumed in Gregorian calendar. (Not true < 1582) */
+    /*  Ref. Jean Meeus, 'Astronomical Algorithms', QB51.3.E43M42, 1991.  */
+    /*  This function is agnostic to the TT-to-UTC offset.  You get out   */
+    /*  what you put in.                                                  */
+
+    double Sim42DataPoint::DateToTime(long Year, long Month, long Day,
+                long Hour, long Minute, double Second)
+    {
+        long A,B;
+        double Days;
+        
+        if (Month < 3) {
+            Year--;
+            Month+=12;
+        }
+
+        A = Year/100;
+        B = 2 - A + A/4;
+
+        /* Days since J2000 Epoch (01 Jan 2000 12:00:00.0) */
+        Days = floor(365.25*(Year-2000))
+                    + floor(30.6001*(Month+1))
+                    + Day + B - 50.5;
+
+        /* Add fractional day */
+        return(86400.0*Days + 3600.0*((double) Hour)
+            + 60.0*((double) Minute) + Second);
+    }
 
     std::string Sim42DataPoint::to_string(void) const
     {
