@@ -46,6 +46,13 @@ namespace Nos3
         Sim42DataPoint(std::vector<std::string> &message);
         //@}
 
+        /// @name Mutators
+        //@{
+        /// \brief Parses a string containing time of the form YEAR-DOY-HH:MM:SS.SSS
+        ///        and puts the results in the _key_value map.
+        void parse_time(const std::string& value);
+        //@}
+
         /// @name Accessors
         //@{
         /// \brief Returns one long single string representation of the 42 simulation data point
@@ -65,6 +72,8 @@ namespace Nos3
         /// @name Static Methods
         //@{
         static void parse_double_vector(const std::string& text, std::vector<double>& dv);            
+        static void DOY2MD(long Year, long DayOfYear, long *Month, long *Day);
+        static double DateToTime(long Year, long Month, long Day, long Hour, long Minute, double Second);
         //@}
 
     private:

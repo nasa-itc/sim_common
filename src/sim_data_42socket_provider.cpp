@@ -202,7 +202,7 @@ namespace Nos3
                 Done = 1;
             } else {
                 message.push_back(line);
-                if (!strncmp(line,"[EOF]",5)) Done = 1;
+                if (!strncmp(line,"[ENDMSG]",8)) Done = 1;
             }
         }
     }
